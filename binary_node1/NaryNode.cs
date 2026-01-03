@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Milestone2;
+namespace Milestone1;
 
 internal class NaryNode<T>
 {
@@ -29,7 +29,7 @@ internal class NaryNode<T>
             {
                 result.Append(' ').Append(nullHandler(child.Value));
                 tmp.Enqueue(child);
-            }
+            }      
 
             result.AppendLine();
         }
@@ -37,26 +37,5 @@ internal class NaryNode<T>
         return result.ToString().TrimEnd();
     }
 
-    public static void ToString(string spaces, StringBuilder result, NaryNode<T> node)
-    {
-        if (node is null)
-        {
-            return;
-        }
-
-        result.Append(spaces).Append(node!.Value).Append(':').AppendLine();
-        spaces += "  ";
-
-        foreach (var child in node.Children)
-        {
-           ToString(spaces, result, child);
-        }        
-    }
-
-    public override string ToString()
-    {
-        var result = new StringBuilder();
-        ToString(string.Empty, result, this);
-        return result.ToString().TrimEnd();
-    }
+    public override string ToString() => ToString(value => value?.ToString() ?? "null");
 }

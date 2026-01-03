@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace binary_node1;
+namespace Milestone1;
 
 internal class BinaryNode<T>
 {
