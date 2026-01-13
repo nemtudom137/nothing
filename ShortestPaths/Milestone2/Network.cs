@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows;
 
-namespace Milestone1;
+namespace Milestone2;
 
 internal class Network
 {
@@ -13,7 +13,12 @@ internal class Network
     {
         Clear();
     }
-   
+
+    internal Network(string filename)
+    {
+        ReadFromFile(filename);
+    }
+
     private void Clear()
     {
         Nodes = new List<Node>();

@@ -17,27 +17,22 @@ public partial class MainWindow : Window
     private void network1_Click(object sender, RoutedEventArgs e)
     {
         Network test1 = new Network();
-        Node a = new Node(new Point(20, 20), "A");
-        Node b = new Node(new Point(120, 120), "B");        
-        test1.AddNode(a);
-        test1.AddNode(b);
+        Node a = new Node(test1, new Point(20, 20), "A");
+        Node b = new Node(test1, new Point(120, 120), "B");
         _ = new Link(test1, a, b, 10);
 
         ValidateNetwork(test1, "test1");
-        
+
     }
 
     private void network2_Click(object sender, RoutedEventArgs e)
     {
         Network test2 = new Network();
-        Node a = new Node(new Point(20, 20), "A");
-        Node b = new Node(new Point(120, 20), "B");
-        Node c = new Node(new Point(20, 120), "C");
-        Node d = new Node(new Point(120, 120), "D");
-        test2.AddNode(a);
-        test2.AddNode(b);
-        test2.AddNode(c);
-        test2.AddNode(d);
+        Node a = new Node(test2, new Point(20, 20), "A");
+        Node b = new Node(test2, new Point(120, 20), "B");
+        Node c = new Node(test2, new Point(20, 120), "C");
+        Node d = new Node(test2, new Point(120, 120), "D");
+
         _ = new Link(test2, test2.Nodes[0], test2.Nodes[1], 10);
         _ = new Link(test2, test2.Nodes[1], test2.Nodes[3], 15);
         _ = new Link(test2, test2.Nodes[0], test2.Nodes[2], 20);
@@ -48,14 +43,11 @@ public partial class MainWindow : Window
     private void network3_Click(object sender, RoutedEventArgs e)
     {
         Network test3 = new Network();
-        Node a = new Node(new Point(20, 20), "A");
-        Node b = new Node(new Point(120, 20), "B");
-        Node c = new Node(new Point(20, 120), "C");
-        Node d = new Node(new Point(120, 120), "D");
-        test3.AddNode(a);
-        test3.AddNode(b);
-        test3.AddNode(c);
-        test3.AddNode(d);
+        Node a = new Node(test3, new Point(20, 20), "A");
+        Node b = new Node(test3, new Point(120, 20), "B");
+        Node c = new Node(test3, new Point(20, 120), "C");
+        Node d = new Node(test3, new Point(120, 120), "D");
+
         _ = new Link(test3, test3.Nodes[0], test3.Nodes[1], 10);
         _ = new Link(test3, test3.Nodes[1], test3.Nodes[3], 15);
         _ = new Link(test3, test3.Nodes[0], test3.Nodes[2], 20);

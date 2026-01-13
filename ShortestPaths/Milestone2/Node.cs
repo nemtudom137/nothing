@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Milestone1;
+namespace Milestone2;
 
 internal class Node
 {
