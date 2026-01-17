@@ -15,7 +15,7 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private Network MyNetwork = new Network();
+    private Network network = new Network();
 
     private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
@@ -35,13 +35,13 @@ public partial class MainWindow : Window
             if (result == true)
             {
                 // Open the network.
-
+                network = new Network(dialog.FileName);
                 }
         }
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message);
-            MyNetwork = new Network();
+            network = new Network();
         }
 
         // Display the network.
@@ -50,10 +50,9 @@ public partial class MainWindow : Window
 
     private void DrawNetwork()
     {
-        // Remove any previous drawing.
-
-            // Make the network draw itself.
-        }
+        mainCanvas.Children.Clear();
+        network.Draw(mainCanvas);
+    }
 
     private void ExitCommand_Executed(object sender, RoutedEventArgs e)
     {

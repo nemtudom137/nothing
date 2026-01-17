@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Milestone2;
 
@@ -153,4 +154,53 @@ internal class Network
     }
 
     internal void ReadFromFile(string filename) => Deserialize(File.ReadAllText(filename));
+
+    internal void Draw(Canvas mainCanvas)
+    {
+        mainCanvas.RenderSize = GetBounds().Size;
+        foreach(var link in Links)
+        {
+            link.Draw(mainCanvas);
+        }
+
+        foreach (var link in Links)
+        {
+            link.DrawLabel(mainCanvas);
+        }
+
+        foreach (var node in Nodes)
+        {
+            node.Draw(mainCanvas);
+        }
+    }
+
+    internal Rect GetBounds()
+    {
+        double minX, minY, maxX, maxY;
+        minX =  minY =  maxX =  maxY = 0;
+        foreach (var center in Nodes.Select(x => x.Center))
+        {
+            if(center.X < minX)
+            {
+                minX = center.X;
+            }
+
+            if (center.X > maxX)
+            {
+                maxX = center.X;
+            }
+
+            if (center.Y < minY)
+            {
+                minX = center.Y;
+            }
+
+            if (center.Y > maxY)
+            {
+                maxX = center.Y;
+            }
+        }
+
+        return new Rect(new Point(minX, minY), new Point(maxX, maxY));
+    }
 }

@@ -38,7 +38,7 @@ public partial class MainWindow : Window
         _ = new Link(test2, test2.Nodes[0], test2.Nodes[2], 20);
         _ = new Link(test2, test2.Nodes[2], test2.Nodes[3], 25);
 
-        ValidateNetwork(test2, "test3");
+        ValidateNetwork(test2, "test2");
     }
     private void network3_Click(object sender, RoutedEventArgs e)
     {
