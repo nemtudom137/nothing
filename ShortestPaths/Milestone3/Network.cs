@@ -1,12 +1,17 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
-namespace Milestone2;
+namespace Milestone3;
 
 internal class Network
 {
+    private const double MARGIN = 20;
+    private const int BIG_NODE_LIMIT = 100;
+    private const char SEPARATOR = ';';
     internal List<Node> Nodes { get; set; }
     internal List<Link> Links { get; set; }
 
@@ -42,16 +47,19 @@ internal class Network
         sb.Append(Nodes.Count).Append("# Num nodes.").AppendLine();
         sb.Append(Links.Count).Append("# Num links.").AppendLine();
 
+        NumberFormatInfo nfi = new NumberFormatInfo();
+        nfi.NumberDecimalSeparator = ".";
+
         sb.AppendLine().Append("# Nodes.").AppendLine();
         foreach (Node n in Nodes)
         {
-            sb.Append(n.Center.X).Append(',').Append(n.Center.Y).Append(',').Append(n.Text).AppendLine();
+            sb.Append(n.Center.X).Append(SEPARATOR).Append(n.Center.Y).Append(SEPARATOR).Append(n.Text).AppendLine();
         }
 
         sb.AppendLine().Append("# Links.").AppendLine();
         foreach (Link l in Links)
         {
-            sb.Append(l.FromNode.Index).Append(',').Append(l.ToNode.Index).Append(',').Append(l.Cost).AppendLine();
+            sb.Append(l.FromNode.Index).Append(SEPARATOR).Append(l.ToNode.Index).Append(SEPARATOR).Append(l.Cost).AppendLine();
         }
 
         return sb.ToString().TrimEnd();
@@ -83,13 +91,13 @@ internal class Network
         {
             string line = ReadNextLine(sr) ?? throw new ArgumentException(nameof(serialization));
 
-            string[] parts = line.Split(',');
+            string[] parts = line.Split(SEPARATOR);
             if (parts.Length != 3)
             {
                 throw new ArgumentException(nameof(serialization));
             }
 
-            Point center = new Point(ToNonNegativeInt(parts[0]), ToNonNegativeInt(parts[1]));
+            Point center = new Point(ToNonNegativeDouble(parts[0]), ToNonNegativeDouble(parts[1]));
             string text = parts[2];
             _ = new Node(this, center, text);
         }
@@ -98,7 +106,7 @@ internal class Network
         {
             string line = ReadNextLine(sr) ?? throw new ArgumentException(nameof(serialization));
 
-            string[] parts = line.Split(',');
+            string[] parts = line.Split(SEPARATOR);
             if (parts.Length != 3)
             {
                 throw new ArgumentException(nameof(serialization));
@@ -106,7 +114,7 @@ internal class Network
 
             int fromIndex = ToNonNegativeInt(parts[0]);
             int toIndex = ToNonNegativeInt(parts[1]);
-            int cost = ToNonNegativeInt(parts[2]);
+            double cost = ToNonNegativeDouble(parts[2]);
 
             if (fromIndex >= numberOfNode || toIndex >= numberOfNode)
             {
@@ -153,24 +161,42 @@ internal class Network
         return value;
     }
 
+    private static double ToNonNegativeDouble(string? s)
+    {
+        if (s is null || !double.TryParse(s, out double value) || value < 0)
+        {
+            throw new ArgumentException(nameof(s));
+        }
+
+        return value;
+    }
+
     internal void ReadFromFile(string filename) => Deserialize(File.ReadAllText(filename));
 
-    internal void Draw(Canvas mainCanvas)
+    internal void Draw(Canvas canvas)
     {
-        mainCanvas.RenderSize = GetBounds().Size;
-        foreach(var link in Links)
-        {
-            link.Draw(mainCanvas);
-        }
+        Rect bounds = GetBounds();
+        canvas.Width = bounds.Right + 2 * MARGIN;
+        canvas.Height = bounds.Bottom + 2 * MARGIN;
+
+        bool drawLabels = Nodes.Count <= BIG_NODE_LIMIT;
 
         foreach (var link in Links)
         {
-            link.DrawLabel(mainCanvas);
+            link.Draw(canvas);
+        }
+
+        if (drawLabels)
+        {
+            foreach (var link in Links)
+            {
+                link.DrawLabel(canvas);
+            }
         }
 
         foreach (var node in Nodes)
         {
-            node.Draw(mainCanvas);
+            node.Draw(canvas, drawLabels);
         }
     }
 
@@ -182,7 +208,7 @@ internal class Network
         double maxY = double.NegativeInfinity;
         foreach (var center in Nodes.Select(x => x.Center))
         {
-            if(center.X < minX)
+            if (center.X < minX)
             {
                 minX = center.X;
             }
@@ -203,6 +229,6 @@ internal class Network
             }
         }
 
-        return new Rect(new Point(minX, minY), new Point(maxX, maxY));
+        return new Rect(minX, minY, maxX - minX, maxY - minY);
     }
 }
