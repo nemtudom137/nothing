@@ -19,8 +19,8 @@ public partial class MainWindow : Window
 
         double x = MARGIN;
         double y = MARGIN;
-        double dx = (width - 2 * MARGIN) / numCols;
-        double dy = (height - 2 * MARGIN) / numRows;
+        double dx = (width - 2 * MARGIN) / (numCols - 1);
+        double dy = (height - 2 * MARGIN) / (numRows - 1);
 
         //nodes
         for (int i = 0; i < numRows; i++)
