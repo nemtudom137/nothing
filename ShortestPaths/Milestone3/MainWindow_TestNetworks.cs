@@ -63,10 +63,8 @@ public partial class MainWindow : Window
     {
         Random rnd = new Random();
         double lenght = Distance(n1.Center, n2.Center);
-        double x = 1 + 0.2 * rnd.NextDouble();
         _ = new Link(network, n1, n2, Math.Round(lenght * (1 + 0.2 * rnd.NextDouble()), 0));
         _ = new Link(network, n2, n1, Math.Round(lenght * (1 + 0.2 * rnd.NextDouble()), 0));
-
     }
 
     private static double Distance(Point p1, Point p2)
